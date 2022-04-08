@@ -111,9 +111,10 @@
           <div>${IPA.langString('Beta')} - ${row.version}(Build ${row.build}) - ${IPA.sizeStr(row.size)}</div>
           <div class='date'>
             <img class="type" src="/img/${row.type===0?'ios':'android'}.svg"></img>
-            <span class="title">${IPA.langString('Upload Date: ')}${dayjs(row.date).fromNow()}</span>
+            <span class="title">${IPA.langString('Upload Date: ')} ${dayjs(row.date).fromNow()}</span>
             <span onclick="onClickDelete('${row.id}')" ${del?"":"hidden"} class="delete">${IPA.langString('Delete')}</span>
           </div>
+          <div>${dayjs(row.date).format('HH:mm DD/MM/YY')}</div>
           <div class="qrcode"></div>
           <div onclick="${onInstallClick(row)}" class="install">${IPA.langString('Download and Install')}</div>
         `
@@ -132,6 +133,7 @@
     }
 
     function onClickDelete(id) {
+      event.stopPropagation();
       if (!confirm(IPA.langString('Confirm to Delete?'))) {
         return
       }
