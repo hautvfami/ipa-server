@@ -3,6 +3,7 @@ version: "2"
 services:
   web:
     build: .
+    image: hautvfami/ipa-server:v1.1
     container_name: ipa-server
     restart: unless-stopped
     environment:
@@ -15,8 +16,8 @@ services:
       # option, metadata storage path, use random secret path to keep your metadata safer in case of remote storage
       - META_PATH=appList.json
       # delete app enabled, true/false
-      - DELETE_ENABLED=false
+      - DELETE_ENABLED=true
     ports:
-      - "9008:8080"
+      - "80:8080"
     volumes:
-      - "/docker/data/ipa-server:/app/upload"
+      - "/Users/hautran/Dev/ipa-server/upload:/app/upload"

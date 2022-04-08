@@ -13,7 +13,6 @@ import (
 
 	"github.com/iineva/CgbiPngFix/ipaPng"
 
-	"github.com/iineva/bom/pkg/asset"
 	"github.com/iineva/ipa-server/pkg/plist"
 	"github.com/iineva/ipa-server/pkg/seekbuf"
 )
@@ -27,8 +26,8 @@ const (
 	// Payload/UnicornApp.app/AppIcon76x76.png
 	newIconRegular   = `^Payload\/.*\.app\/AppIcon-?_?\w*(\d+(\.\d+)?)x(\d+(\.\d+)?)(@\dx)?(~ipad)?\.png$`
 	oldIconRegular   = `^Payload\/.*\.app\/Icon-?_?\w*(\d+(\.\d+)?)?.png$`
-	assetRegular     = `^Payload\/.*\.app/Assets.car$`
-	infoPlistRegular = `^Payload\/.*\.app/Info.plist$`
+	assetRegular     = `^Payload\/.*\.app\/Assets.car$`
+	infoPlistRegular = `^Payload\/.*\.app\/Info.plist$`
 )
 
 // TODO: use InfoPlistIcon to parse icon files
@@ -63,7 +62,7 @@ func Parse(readerAt io.ReaderAt, size int64) (*IPA, error) {
 	// match files
 	var plistFile *zip.File
 	var iconFiles []*zip.File
-	var assetFile *zip.File
+	//var assetFile *zip.File
 	for _, f := range r.File {
 
 		// parse Info.plist
@@ -95,7 +94,7 @@ func Parse(readerAt io.ReaderAt, size int64) (*IPA, error) {
 		if match, err = regexp.MatchString(assetRegular, f.Name); err != nil {
 			return nil, err
 		} else if match {
-			assetFile = f
+			//assetFile = f
 		}
 
 	}
@@ -139,11 +138,14 @@ func Parse(readerAt io.ReaderAt, size int64) (*IPA, error) {
 	img, err := parseIconImage(iconFile)
 	if err == nil {
 		app.icon = img
-	} else if assetFile != nil {
-		// try get icon from Assets.car
-		img, _ := parseIconAssets(assetFile)
-		app.icon = img
 	}
+
+	// Error memory leak
+	//else if assetFile != nil {
+	//	// try get icon from Assets.car
+	//	img, _ := parseIconAssets(assetFile)
+	//	app.icon = img
+	//}
 
 	return app, nil
 }
@@ -205,23 +207,23 @@ func parseIconImage(iconFile *zip.File) (image.Image, error) {
 	return img, nil
 }
 
-func parseIconAssets(assetFile *zip.File) (image.Image, error) {
-
-	f, err := assetFile.Open()
-	if err != nil {
-		return nil, err
-	}
-	defer f.Close()
-
-	buf, err := seekbuf.Open(f, seekbuf.MemoryMode)
-	if err != nil {
-		return nil, err
-	}
-	defer buf.Close()
-
-	a, err := asset.NewWithReadSeeker(buf)
-	if err != nil {
-		return nil, err
-	}
-	return a.Image("AppIcon")
-}
+//func parseIconAssets(assetFile *zip.File) (image.Image, error) {
+//
+//	f, err := assetFile.Open()
+//	if err != nil {
+//		return nil, err
+//	}
+//	defer f.Close()
+//
+//	buf, err := seekbuf.Open(f, seekbuf.MemoryMode)
+//	if err != nil {
+//		return nil, err
+//	}
+//	defer buf.Close()
+//
+//	a, err := asset.NewWithReadSeeker(buf)
+//	if err != nil {
+//		return nil, err
+//	}
+//	return a.Image("AppIcon")
+//}
