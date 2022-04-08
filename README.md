@@ -44,7 +44,7 @@ docker-compose up -d
 * REMOTE_URL: remote storager public url, https://cdn.example.com
 * DELETE_ENABLED: delete app enabled, `true` `false`
 
-[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/iineva/ipa-server)
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/hautvfami/ipa-server)
 
 # Docker Deploy
 
