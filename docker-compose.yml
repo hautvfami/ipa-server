@@ -3,7 +3,7 @@ version: "2"
 services:
   web:
     build: .
-    image: hautvfami/ipa-server:v1.1
+    image: hautvfami/ipa-server:v1.0-amd64
     container_name: ipa-server
     restart: unless-stopped
     environment:

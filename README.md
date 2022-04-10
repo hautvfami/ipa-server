@@ -104,3 +104,5 @@ make build
 # run local server
 make
 ```
+
+*** I'm using http://kaffeine.herokuapp.com/ to prevent heroku app fall asleep
