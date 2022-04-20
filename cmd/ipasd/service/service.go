@@ -64,7 +64,7 @@ type Service interface {
 	Find(id string, publicURL string) (*Item, error)
 	History(id string, publicURL string) ([]*Item, error)
 	Delete(id string) error
-	Add(r Reader, t AppInfoType) error
+	Add(r Reader, t AppInfoType) (string, error)
 	Plist(id, publicURL string) ([]byte, error)
 }
 
@@ -171,19 +171,19 @@ func (s *service) Delete(id string) error {
 	return nil
 }
 
-func (s *service) Add(r Reader, t AppInfoType) error {
+func (s *service) Add(r Reader, t AppInfoType) (string, error) {
 
 	app, err := s.addPackage(r, t)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	// update list
 	s.lock.Lock()
 	s.list = append([]*AppInfo{app}, s.list...)
 	s.lock.Unlock()
-
-	return s.saveMetadata()
+	err = s.saveMetadata()
+	return s.list[0].ID, nil
 }
 
 func (s *service) addPackage(r Reader, t AppInfoType) (*AppInfo, error) {

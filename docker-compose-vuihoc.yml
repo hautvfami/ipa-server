@@ -13,10 +13,10 @@ services:
       # option, remote storager public url, https://cdn.example.com
       - REMOTE_URL=
       # option, metadata storage path, use random secret path to keep your metadata safer in case of remote storage
-      - META_PATH=appList.json
+      - META_PATH=storage.json
       # delete app enabled, true/false
       - DELETE_ENABLED=true
     ports:
-      - "80:8080"
-    volumes:
-      - "/Users/hautran/Dev/ipa-server/upload:/app/upload"
+      - "27668:8080"
+    # volumes:
+    #   - "/home/app-store.vuihoc.vn/upload:/app/upload"
